@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>图片无序预加载-优化</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="keywords" content="your keywords">
+    <meta name="description" content="your description">
+    <style>
+        *{margin: 0;padding: 0}
+        #box{width: 100%;height:100%;}
+        img{width: 100%;height: 100%;border: 1px solid red;}
+        #click{text-align: center;}
+    </style>
+</head>
+<body>
+<div id="box">
+    <img src="" alt="">
+    <div id="click">
+        <a href="" id="prev">上一页</a>
+        <a href="" id="next">下一页</a>
+    </div>
+</div>
+<script src="js/jquery.js"></script>
+<script>
+    var imgs = [
+        'image/PC/0001.jpg',
+        'image/PC/0002.jpg',
+        'image/PC/0003.jpg',
+        'image/PC/0004.jpg',
+        'image/PC/0005.jpg',
+        'image/PC/0006.jpg',
+        'image/PC/0007.jpg',
+        'image/PC/0008.jpg',
+        'image/PC/0009.jpg',
+        'image/PC/0010.jpg',
+        'image/PC/0011.jpg',
+        'image/PC/0012.jpg',
+
+    ];
+    var index = 0,
+        curImg = 0,
+        num = 1,//预加载当前图片后num张图片..
+        len = imgs.length;
+    $(function () {
+        $('img').attr('src',imgs[0]);
+        $('a').on('click',function(){
+            curindex = (this.id === 'prev') ? Math.max(0,--index) : Math.min(imgs.length-1,++index);
+            $('img').attr('src',imgs[curindex]);
+            load();
+            return false;
+        })
+    })
+    function load(){
+        var imgObj = new Image();
+        $(imgObj).on('load error',function(){
+            /*if(curImg >= len){
+
+            }else{
+                load();
+            }*/
+            if(curImg <= index+num){
+                load();
+                curImg++;
+            }
+        })
+        imgObj.src = imgs[curImg];
+    }
+    load();
+</script>
+</body>
+</html>
